@@ -1,13 +1,13 @@
-package com.codequest.webapp;
+package com.company.ecommerce;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class WebAppApplication {
+public class EcommerceApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(WebAppApplication.class, args);
+        SpringApplication.run(EcommerceApplication.class, args);
     }
 
 }

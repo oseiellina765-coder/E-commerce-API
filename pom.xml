@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.codequest</groupId>
-    <artifactId>Web-app</artifactId>
+    <artifactId>Ecommerce</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Web-app</name>
     <description>Web-app</description>

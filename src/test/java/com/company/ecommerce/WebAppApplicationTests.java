@@ -1,4 +1,4 @@
-package com.codequest.webapp;
+package com.company.ecommerce;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
