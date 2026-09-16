@@ -1,4 +1,5 @@
 package com.company.ecommerce.product.dto;
 
-public record ProductRequestDto() {
+public record
+ProductRequestDto() {
 }
