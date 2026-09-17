@@ -1,58 +1,58 @@
 package com.company.ecommerce.product.service;
 
+import com.company.ecommerce.product.dto.ProductRequestDTO;
+import com.company.ecommerce.product.dto.ProductResponseDTO;
 import com.company.ecommerce.product.entity.Product;
+import com.company.ecommerce.product.mapper.ProductMapper;
 import com.company.ecommerce.product.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final ProductMapper productMapper;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, ProductMapper productMapper) {
         this.productRepository = productRepository;
+        this.productMapper = productMapper;
     }
 
-    // ==================== CREATE ====================
-    public Product createProduct(Product product) {
-        product.setCreatedAt(LocalDateTime.now());
-        product.setUpdatedAt(LocalDateTime.now());
-        return productRepository.save(product);
+    public ProductResponseDTO createProduct(ProductRequestDTO request) {
+        Product product = productMapper.toEntity(request);
+        Product savedProduct = productRepository.save(product);
+        return productMapper.toResponse(savedProduct);
     }
 
-    // ==================== READ ALL ====================
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    public List<ProductResponseDTO> getAllProducts() {
+        return productRepository.findAll()
+                .stream()
+                .map(productMapper::toResponse)
+                .collect(Collectors.toList());
     }
 
-    // ==================== READ ONE ====================
-    public Product getProductById(UUID id) {
-        return productRepository.findById(id)
+    public ProductResponseDTO getProductById(UUID id) {
+        Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
+        return productMapper.toResponse(product);
     }
 
-    // ==================== UPDATE ====================
-    public Product updateProduct(UUID id, Product productDetails) {
-        Product existingProduct = getProductById(id);
+    public ProductResponseDTO updateProduct(UUID id, ProductRequestDTO request) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
 
-        existingProduct.setName(productDetails.getName());
-        existingProduct.setDescription(productDetails.getDescription());
-        existingProduct.setSku(productDetails.getSku());
-        existingProduct.setPrice(productDetails.getPrice());
-        existingProduct.setStockQuantity(productDetails.getStockQuantity());
-        existingProduct.setImageUrl(productDetails.getImageUrl());
-        existingProduct.setActive(productDetails.getActive());
-        existingProduct.setUpdatedAt(LocalDateTime.now());
-
-        return productRepository.save(existingProduct);
+        productMapper.updateEntity(product, request);
+        Product updatedProduct = productRepository.save(product);
+        return productMapper.toResponse(updatedProduct);
     }
 
     public void deleteProduct(UUID id) {
-        Product product = getProductById(id);
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
         productRepository.delete(product);
     }
 }

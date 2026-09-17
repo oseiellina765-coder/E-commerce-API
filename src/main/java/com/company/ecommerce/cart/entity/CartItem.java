@@ -7,34 +7,38 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "carts")
+@Table(
+        name = "cart_items",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"cart_id", "product_id"})
+        }
+)
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Cart {
+public class CartItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "customer_id", nullable = false, unique = true)
-    private String customerId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cart_id", nullable = false)
+    private Cart cart;
+
+    @Column(name = "product_id", nullable = false)
+    private UUID productId;
+
+    @Column(nullable = false)
+    private Integer quantity;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
-
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CartItem> items = new ArrayList<>();
-
-
 }

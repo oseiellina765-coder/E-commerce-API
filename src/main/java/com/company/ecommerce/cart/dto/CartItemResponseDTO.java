@@ -4,16 +4,15 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Getter
 @Setter
-public class CartResponseDTO {
+public class CartItemResponseDTO {
 
     private UUID id;
-    private String customerId;
-    private List<CartItemResponseDTO> items;
+    private UUID productId;
+    private Integer quantity;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
